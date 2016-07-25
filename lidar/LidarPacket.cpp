@@ -1,6 +1,6 @@
 #include "LidarPacket.hpp"
 
-LidarPacket::LidarPacket(byte* bytes) {
+LidarPacket::LidarPacket(char* bytes) {
 	for (int i = 0; i<42; i++) { //header is the first 42 bytes
 		header[i] = bytes[i];
 	}
@@ -17,18 +17,18 @@ LidarPacket::LidarPacket(byte* bytes) {
 
 }
 
-void LidarPacket::dataBlockPopulate(int i, byte* bytes) {
-	dataBlock[i].flag = shortFromBytes(bytes[42+100*i], bytes[43+100*i]);
-	dataBlock[i].azimuth = shortFromBytes(bytes[44+100*i], bytes[45+100*i]);
+void LidarPacket::dataBlockPopulate(int i, char* bytes) {
+	dataBlocks[i].flag = shortFromBytes(bytes[42+100*i], bytes[43+100*i]);
+	dataBlocks[i].azimuth = shortFromBytes(bytes[44+100*i], bytes[45+100*i]);
 	for (int j = 0; j<32; j++) {
 		channelDataPopulate(i, j, bytes);
 	}
 
 }
 
-void LidarPacket::channelDataPopulate(int i, int j, byte* bytes) {
-	dataBlock[i].channelData[j].distance = shortFromBytes(bytes[46+(100*i)+(3*j)], bytes[47+(100*i)+(3*j)]);
-	dataBlock[i].channelData[j].reflectivity = bytes[48+(100*i)+(3*j)];
+void LidarPacket::channelDataPopulate(int i, int j, char* bytes) {
+	dataBlocks[i].chanelDataArraySomeoneShouldNameThis[j].distance = shortFromBytes(bytes[46+(100*i)+(3*j)], bytes[47+(100*i)+(3*j)]);
+	dataBlocks[i].chanelDataArraySomeoneShouldNameThis[j].reflectivity = bytes[48+(100*i)+(3*j)];
 }
 unsigned short LidarPacket::shortFromBytes(byte a, byte b) {
    return ((unsigned short)a << 8) | b;

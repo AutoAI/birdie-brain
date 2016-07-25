@@ -4,10 +4,13 @@
 #include <stdlib.h>     /* for atoi() and exit() */
 #include <string.h>     /* for memset() */
 #include <unistd.h>     /* for close() */
+#include <iostream>
 
 #include "LidarPacket.hpp"
 
 #define MAXRECVSTRING 1248  /* Longest string to receive */
+
+typedef unsigned char byte;
 
 void itoa2(char s, char* output) {
     char a = s;
@@ -68,8 +71,8 @@ int main(int argc, char *argv[]) {
     printf("Received: %s\n", recvString);    /* Print the received string */
     printBinary(recvString);
 
-    LidarPacket* packet = new LidarPacket(recvString);
-    cout << packet->timestamp;
+    LidarPacket* packet = new LidarPacket(&recvString[0]);
+    std::cout << packet->timestamp;
 
     delete packet;
     close(sock);
