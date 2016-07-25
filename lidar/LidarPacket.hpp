@@ -1,6 +1,10 @@
 #pragma once
 
 class LidarPacket {
+public:
+    LidarPacket(byte* bytes);
+    ~LidarPacket();
+
     typedef struct channelData {
         short distance;
         byte reflectivity;
@@ -15,5 +19,12 @@ class LidarPacket {
     byte[42] header;
     dataBlock[12] dataBlocks;
     int timestamp;
-    short factory;
+    unsigned short factory;
+
+ private:
+    void dataBlockPopulate(int i, byte* bytes);
+    void channelDataPopulate(int i, intj, byte* bytes);
+    unsigned short shortFromBytes(byte a, byte b);
+
+
 }

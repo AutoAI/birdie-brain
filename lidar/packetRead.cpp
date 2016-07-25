@@ -5,6 +5,8 @@
 #include <string.h>     /* for memset() */
 #include <unistd.h>     /* for close() */
 
+#include "LidarPacket.hpp"
+
 #define MAXRECVSTRING 1248  /* Longest string to receive */
 
 void itoa2(char s, char* output) {
@@ -36,6 +38,7 @@ int main(int argc, char *argv[]) {
     char recvString[MAXRECVSTRING+1]; /* Buffer for received string */
     int recvStringLen;                /* Length of received string */
 
+
     if (argc != 2) {   /* Test for correct number of arguments */
         fprintf(stderr,"Usage: %s <Broadcast Port>\n", argv[0]);
         exit(1);
@@ -64,7 +67,11 @@ int main(int argc, char *argv[]) {
     recvString[recvStringLen] = '\0';
     printf("Received: %s\n", recvString);    /* Print the received string */
     printBinary(recvString);
-    
+
+    LidarPacket* packet = new LidarPacket(recvString);
+    cout << packet->timestamp;
+
+    delete packet;
     close(sock);
     exit(0);
 }
