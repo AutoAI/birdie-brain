@@ -29,16 +29,14 @@ void printBinary(char* s) {
     }
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     int sock;                         /* Socket */
     struct sockaddr_in broadcastAddr; /* Broadcast Address */
     unsigned short broadcastPort;     /* Port */
     char recvString[MAXRECVSTRING+1]; /* Buffer for received string */
     int recvStringLen;                /* Length of received string */
 
-    if (argc != 2)    /* Test for correct number of arguments */
-    {
+    if (argc != 2) {   /* Test for correct number of arguments */
         fprintf(stderr,"Usage: %s <Broadcast Port>\n", argv[0]);
         exit(1);
     }
