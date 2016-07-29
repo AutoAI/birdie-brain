@@ -1,4 +1,5 @@
 #pragma once
+#include "point3d.hpp"
 
 // class for storing data from one packet from the lidar (refer to VLP-16 manual page 12)
 class LidarPacket {
@@ -22,20 +23,20 @@ public:
         // how far around the first sample is
         short azimuth;
         // samples from each channel, 2 per channel (0-15, then 0-15 again)
-        channelData chanelDataArraySomeoneShouldNameThis[32];
+        channelData channelDatas[32];
     } dataBlock;
 
-    // 42-byte header because that's what the manual says
-    byte header[42];
 	
     // 12 blocks of data
     dataBlock dataBlocks[12];
     // time when sample was collected (from lidar's clock)
     int timestamp;
     unsigned short factory;
-
+    void packetConvert(point3d*);
  private:
     void dataBlockPopulate(int i, char* bytes);
     void channelDataPopulate(int i, int j, char* bytes);
     unsigned short shortFromBytes(byte a, byte b);
+    point3d cartesianFromSpherical(float r, float rho, float theta, float reflectivity);
+    float laserTable [16];    
 };

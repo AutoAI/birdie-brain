@@ -8,7 +8,7 @@
 
 #include "LidarPacket.hpp"
 
-#define MAXRECVSTRING 1248  /* Longest string to receive */
+#define MAXRECVSTRING 1206  /* Longest string to receive */
 
 typedef unsigned char byte;
 
@@ -26,10 +26,10 @@ void itoa2(char s, char* output) {
 
 void printBinary(char* s) {
     char output[9];
-    
+    int i = 0;
     while(*s) {
         itoa2(*s, output);
-        printf("%s\t%x\n", output, (unsigned char)s[0]);
+        printf("%d\t%s\t%x\n", i++, output, (unsigned char)s[0]);
         ++s;
     }
 }
@@ -64,16 +64,19 @@ int main(int argc, char *argv[]) {
         perror("bind() failed");
 
     /* Receive a single datagram from the server */
-    if ((recvStringLen = recvfrom(sock, recvString, MAXRECVSTRING, 0, NULL, 0)) < 0)
+    for(int i = 0; i < 100; i++) {
+    if ((recvStringLen = recvfrom(sock, recvString, MAXRECVSTRING, MSG_WAITALL, NULL, 0)) < 0)
         perror("recvfrom() failed");
+    if(recvStringLen != 1206)
+    printf("recv len:\t%d\n", recvStringLen);
+    }
 
     recvString[recvStringLen] = '\0';
-    printf("Received: %s\n", recvString);    /* Print the received string */
-    printBinary(recvString);
+    //printBinary(recvString);
 
     LidarPacket* packet = new LidarPacket(&recvString[0]);
-    std::cout << packet->timestamp;
-
+    std::cout << "Something = ";
+    printf("%u\n", packet->factory);
     delete packet;
     close(sock);
     exit(0);
