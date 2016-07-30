@@ -28,7 +28,7 @@ LidarPacket::LidarPacket(char* bytes) {
 		dataBlockPopulate(i, bytes);
 	}
 	//timestamp
-	timestamp = ((unsigned int)(bytes[1200]) << 24) | ((unsigned int)(bytes[1201]) << 16) | ((unsigned int)(bytes[1202]) << 8) | bytes[1203];
+	timestamp = ((unsigned int)(bytes[1203]) << 24) | ((unsigned int)(bytes[1202]) << 16) | ((unsigned int)(bytes[1201]) << 8) | bytes[1200];
 
 	//factory
 	factory = shortFromBytes(bytes[1204], bytes[1205]);
