@@ -6,22 +6,22 @@ const float RADIANCONVERT = (3.141592653589 / 180);
 
 LidarPacket::LidarPacket(char* bytes) {
 	
-	float laserTable [16] = {   	RADIANCONVERT * -15,
-    	                            RADIANCONVERT * 1,
-        	                        RADIANCONVERT * -13,
-            	                    RADIANCONVERT * -3,
-                	                RADIANCONVERT * -11,
-                    	            RADIANCONVERT * 5,
-                        	        RADIANCONVERT * -9,
-                            	    RADIANCONVERT * 7,
-                                	RADIANCONVERT * -7,
-                                	RADIANCONVERT * 9,
-                                	RADIANCONVERT * -5,
-                                	RADIANCONVERT * 11,
-                                	RADIANCONVERT * -3,
-                                	RADIANCONVERT * 13,
-                                	RADIANCONVERT * -1,
-                                	RADIANCONVERT * 15,
+	float laserTable [16] = {   RADIANCONVERT * -15,
+    	                        RADIANCONVERT * 1,
+        	                    RADIANCONVERT * -13,
+            	                RADIANCONVERT * -3,
+                                RADIANCONVERT * -11,
+                   	            RADIANCONVERT * 5,
+                       	        RADIANCONVERT * -9,
+                           	    RADIANCONVERT * 7,
+                               	RADIANCONVERT * -7,
+                               	RADIANCONVERT * 9,
+                               	RADIANCONVERT * -5,
+                               	RADIANCONVERT * 11,
+                               	RADIANCONVERT * -3,
+                               	RADIANCONVERT * 13,
+                               	RADIANCONVERT * -1,
+                               	RADIANCONVERT * 15,
     };
 
 	for (int i = 0; i<12; i++) {
