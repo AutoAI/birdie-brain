@@ -52,11 +52,12 @@ unsigned short LidarPacket::shortFromBytes(byte a, byte b) {
    return ((unsigned short)b << 8) | a;
 }
 
-}
+
 point3d cartesianFromSpherical(float r, float rho, float theta, float reflectivity) {
 	point3d result;
 	result.x = (r * math.sin(rho) * math.cos(theta));
 	result.y = (r * math.sin(rho) * math.sin(theta));
 	result.z = (r * math.cos(rho));
 	result.reflectivity = reflectivity;
+	return result;
 }
