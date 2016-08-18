@@ -1,30 +1,30 @@
 #include "LidarPacket.hpp"
 #include "point3d.hpp"
 #include <math.h>
+#include <cstdlib>
 
 const float RADIANCONVERT = (3.141592653589 / 180);
 
 LidarPacket::LidarPacket(char* bytes) {
-	
-	float laserTable [16] = {   RADIANCONVERT * -15,
-    	                        RADIANCONVERT * 1,
-        	                    RADIANCONVERT * -13,
-            	                RADIANCONVERT * -3,
-                                RADIANCONVERT * -11,
-                   	            RADIANCONVERT * 5,
-                       	        RADIANCONVERT * -9,
-                           	    RADIANCONVERT * 7,
-                               	RADIANCONVERT * -7,
-                               	RADIANCONVERT * 9,
-                               	RADIANCONVERT * -5,
-                               	RADIANCONVERT * 11,
-                               	RADIANCONVERT * -3,
-                               	RADIANCONVERT * 13,
-                               	RADIANCONVERT * -1,
-                               	RADIANCONVERT * 15,
-    };
+	laserTable = (float*) malloc(16 * (sizeof(float)));
+	laserTable[0] = -15;
+	laserTable[1] = 1;
+	laserTable[2] = -13;
+	laserTable[3] = -3;
+	laserTable[4] = -11;
+	laserTable[5] = 5;
+	laserTable[6] = -9;
+	laserTable[7] = 7;
+	laserTable[8] = -7;
+	laserTable[9] = 9;
+	laserTable[10] = -5;
+	laserTable[11] = 11;
+	laserTable[12] = -3;
+	laserTable[13] = 13;
+	laserTable[14] = -1;
+	laserTable[15] = 15;
 
-	for (int i = 0; i<12; i++) {
+	for (int i = 0; i < 12; i++) {
 		dataBlockPopulate(i, bytes);
 	}
 	//timestamp
@@ -53,11 +53,24 @@ unsigned short LidarPacket::shortFromBytes(byte a, byte b) {
 }
 
 
-point3d cartesianFromSpherical(float r, float rho, float theta, float reflectivity) {
+point3d LidarPacket::cartesianFromSpherical(float r, float rho, float theta, float reflectivity) {
 	point3d result;
-	result.x = (r * math.sin(rho) * math.cos(theta));
-	result.y = (r * math.sin(rho) * math.sin(theta));
-	result.z = (r * math.cos(rho));
+	result.x = (r * sin(rho * RADIANCONVERT) * cos(theta * RADIANCONVERT));
+	result.y = (r * sin(rho * RADIANCONVERT) * sin(theta * RADIANCONVERT));
+	result.z = (r * cos(rho * RADIANCONVERT));
 	result.reflectivity = reflectivity;
+	return result;
+}
+
+point3d* LidarPacket::asCartesian() {
+	point3d* result = (point3d*) malloc(16 * 12 * (sizeof(point3d)));
+	// for each data block
+	for(int i = 0; i < 12; i++) {
+		// for each channel
+		for(int j = 0; j < 16; j++) {
+			result[i * 16 + j] = cartesianFromSpherical(dataBlocks[i].channelDatas[j].distance, laserTable[j], dataBlocks[i].azimuth, dataBlocks[i].channelDatas[j].reflectivity);
+		}
+	}
+
 	return result;
 }
